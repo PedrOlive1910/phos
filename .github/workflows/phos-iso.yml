@@ -1,0 +1,52 @@
+name: Gerar ISO PHOS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phos-iso-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  iso:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Compilar em Debian 13 e montar a ISO
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/iso-output"
+          docker run --rm --privileged \
+            --volume "$GITHUB_WORKSPACE:/src" \
+            --workdir /src \
+            debian:13 \
+            bash tools/ci/build-phos-iso.sh 2>&1 | tee iso-output/build.log
+
+      - name: Guardar ISO e checksum
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: phos-iso-amd64-${{ github.run_number }}
+          path: |
+            iso-output/*.iso
+            iso-output/SHA256SUMS
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
+
+      - name: Guardar log mesmo em caso de erro
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: phos-build-log-${{ github.run_number }}
+          path: iso-output/build.log
+          if-no-files-found: warn
+          retention-days: 7

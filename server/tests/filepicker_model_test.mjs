@@ -1,0 +1,131 @@
+// The system file dialog without a screen. node server/tests/filepicker_model_test.mjs
+import { localDisks, startFolder, pathCrumbs, fitCrumbs, sortRows, stepRow, rangeOf, validName, primaryAction, enterAction, imagesOnly, viewFor, saveView, liveRange, gridStep,
+  ZOOM_MIN, ZOOM_MAX, clampZoom, thumbMetrics, zoomFor, saveZoom, cloudPlaces } from '../../sdk/filepickermodel.js';
+import { ZOOM_MIN as FILES_MIN, ZOOM_MAX as FILES_MAX } from '../../apps/files/viewprefs.js';
+
+let ok = 0;
+const eq = (name, a, b) => { if (JSON.stringify(a) !== JSON.stringify(b)) { console.log(`FAIL ${name}: ${JSON.stringify(a)} != ${JSON.stringify(b)}`); process.exitCode = 1; } else ok++; };
+const home = '/home/ana';
+const usb = { path: '/run/media/ana/USB', fs: 'vfat', name: 'USB' };
+
+eq('local disks only', localDisks([usb, { path: '/media/ana/nas', fs: 'cifs' }, { path: `${home}/.local/share/lordos/remote/x`, fs: 'fuse.sshfs' }, { path: `${home}/.local/share/lordos/remote/y`, fs: 'ext4' }], home), [usb]);
+eq('no list', localDisks(null, home), []);
+
+eq('empty start', startFolder('', home), home);
+eq('relative', startFolder('Downloads', home), `${home}/Downloads`);
+eq('absolute in home', startFolder(`${home}/.ssh/`, home), `${home}/.ssh`);
+eq('the home folder', startFolder(home, home), home);
+eq('on a disk', startFolder(`${usb.path}/a`, home, [usb]), `${usb.path}/a`);
+eq('not on a listed disk', startFolder(`${usb.path}/a`, home, []), home);
+eq('outside', startFolder('/etc', home, [usb]), home);
+eq('a neighbor with the same start', startFolder('/home/anabel', home), home);
+eq('climbing', startFolder('../../etc', home), home);
+eq('climbing absolute', startFolder(`${home}/../root`, home), home);
+
+const labels = (p) => pathCrumbs(p, home).map((c) => c.label);
+eq('home crumb', pathCrumbs(home, home), [{ label: 'ana', path: home, home: true }]);
+eq('in home', labels(`${home}/a/b`), ['ana', 'a', 'b']);
+eq('crumb paths', pathCrumbs(`${home}/a/b`, home).map((c) => c.path), [home, `${home}/a`, `${home}/a/b`]);
+eq('run media', labels(`${usb.path}/x`), ['USB', 'x']);
+eq('media', labels('/media/ana/D/x'), ['D', 'x']);
+eq('server', labels(`${home}/.local/share/lordos/remote/s/x`), ['s', 'x']);
+eq('whole tree', labels('/etc/ssh'), ['/', 'etc', 'ssh']);
+eq('root', pathCrumbs('/', home).map((c) => c.path), ['/']);
+eq('short fits', fitCrumbs([1, 2, 3]), [1, 2, 3]);
+eq('long keeps ends', fitCrumbs([1, 2, 3, 4, 5, 6, 7]), [1, null, 5, 6, 7]);
+
+const rows = [{ name: 'b.txt', path: '/b', size: 1, mtime: 3 }, { name: 'Z', path: '/z', dir: true, size: 0, mtime: 1 }, { name: 'a10', path: '/a10', size: 5, mtime: 2 }, { name: 'a2', path: '/a2', size: 9, mtime: 9 }];
+const names = (s) => sortRows(rows, s).map((r) => r.name);
+eq('by name', names({ by: 'name' }), ['Z', 'a2', 'a10', 'b.txt']);
+eq('name down', names({ by: 'name', desc: true }).slice(1), ['b.txt', 'a10', 'a2']);
+eq('by size', names({ by: 'size' }), ['Z', 'b.txt', 'a10', 'a2']);
+eq('by date, newest first', names({ by: 'date', desc: true }), ['Z', 'a2', 'b.txt', 'a10']);
+
+const list = [{ path: '/d', dir: true }, { path: '/x' }, { path: '/y' }];
+eq('first', stepRow(list, null, 1).path, '/d');
+eq('last', stepRow(list, null, -1).path, '/y');
+eq('next', stepRow(list, '/d', 1).path, '/x');
+eq('stops at the end', stepRow(list, '/y', 1).path, '/y');
+eq('stops at the start', stepRow(list, '/d', -1).path, '/d');
+eq('empty', stepRow([], null, 1), null);
+eq('range skips folders', rangeOf(list, '/y', '/d'), ['/x', '/y']);
+eq('range without anchor', rangeOf(list, null, '/x'), null);
+
+for (const bad of ['', '  ', 'a/b', '.', '..']) eq(`bad name ${bad}`, validName(bad), false);
+eq('good name', validName('nuevo ñ.txt'), true);
+
+const file = { path: '/h/f' }, folder = { path: '/h/d', dir: true };
+const base = { mode: 'open', dir: '/h', row: null, chosen: [] };
+eq('open nothing', primaryAction(base), null);
+eq('open file', primaryAction({ ...base, row: file }), { pick: '/h/f' });
+eq('open folder enters', primaryAction({ ...base, row: folder }), { go: '/h/d' });
+eq('multiple none', primaryAction({ ...base, multiple: true, row: file }), null);
+eq('multiple', primaryAction({ ...base, multiple: true, chosen: ['/a', '/b'] }), { pickMany: ['/a', '/b'] });
+eq('multiple folder', primaryAction({ ...base, multiple: true, row: folder }), { go: '/h/d' });
+eq('folder in view', primaryAction({ ...base, mode: 'folder' }), { pick: '/h' });
+eq('folder selected', primaryAction({ ...base, mode: 'folder', row: folder }), { pick: '/h/d' });
+eq('save', primaryAction({ ...base, mode: 'save', name: 'a' }), { save: true });
+eq('save no name', primaryAction({ ...base, mode: 'save', name: '' }), null);
+eq('save read-only', primaryAction({ ...base, mode: 'save', name: 'a', writable: false }), null);
+eq('enter on a folder', enterAction({ ...base, mode: 'folder', row: folder }), { go: '/h/d' });
+eq('enter, folder in view', enterAction({ ...base, mode: 'folder' }), { pick: '/h' });
+eq('enter in save, on a folder', enterAction({ ...base, mode: 'save', name: 'a', row: folder }), { go: '/h/d' });
+eq('enter in save', enterAction({ ...base, mode: 'save', name: 'a', row: file }), { save: true });
+eq('enter, multiple, one row', enterAction({ ...base, multiple: true, row: file }), { pickMany: ['/h/f'] });
+eq('enter, multiple, chosen', enterAction({ ...base, multiple: true, row: file, chosen: ['/a'] }), { pickMany: ['/a'] });
+
+// the List / Thumbnails switch
+eq('wallpaper filter is images', imagesOnly(/\.(png|jpe?g)$/i), true);
+eq('contact photo filter', imagesOnly(/\.(png|jpe?g|gif|bmp|webp)$/i), true);
+eq('notes test object', imagesOnly({ test: (n) => /\.(png|jpe?g|gif|webp)$/i.test(n) }), true);
+eq('a function', imagesOnly((n) => n.endsWith('.png')), true);
+eq('portal image globs', imagesOnly(/^(.*\.png|.*\.jpg|.*\.jpeg)$/i), true);
+eq('no filter', imagesOnly(null), false);
+eq('keys', imagesOnly(/\.pub$/), false);
+eq('images and pdf', imagesOnly(/\.(png|pdf)$/i), false);
+eq('everything', imagesOnly(/.*/), false);
+eq('a throwing test', imagesOnly({ test: () => { throw new Error('x'); } }), false);
+eq('default files', viewFor(null, false), 'list');
+eq('default images', viewFor(null, true), 'thumbs');
+eq('remembered files', viewFor({ files: 'thumbs' }, false), 'thumbs');
+eq('remembered images', viewFor({ images: 'list' }, true), 'list');
+eq('each its own', viewFor({ files: 'thumbs' }, true), 'thumbs');
+eq('junk', viewFor({ files: 'huge' }, false), 'list');
+eq('save view', saveView({ images: 'list' }, false, 'thumbs'), { images: 'list', files: 'thumbs' });
+eq('save view, nothing yet', saveView(null, true, 'list'), { images: 'list' });
+eq('live, top', liveRange(0, 300, 100, 4, 100), [0, 20]);
+eq('live, scrolled', liveRange(1000, 300, 100, 4, 100), [36, 60]);
+eq('live, end', liveRange(2400, 300, 100, 4, 100), [92, 100]);
+eq('live, empty', liveRange(0, 300, 100, 4, 0), [0, 0]);
+eq('live, no columns', liveRange(0, 300, 100, 0, 9), [0, 0]);
+eq('grid right', gridStep('ArrowRight', 5), 1);
+eq('grid left rtl', gridStep('ArrowLeft', 5, true), 1);
+eq('grid down', gridStep('ArrowDown', 5), 5);
+eq('grid up', gridStep('ArrowUp', 5), -5);
+eq('grid other', gridStep('Home', 5), 0);
+eq('#86: cloud places by name', cloudPlaces([{ id: 'a', name: 'work', mount: '/h/Cloud/work' }, { id: 'b', name: 'Box', mount: '/h/Cloud/Box' }], '/h').map((p) => p.name), ['Box', 'work']);
+
+// the thumbnails' size (issue #58): Files' steps, a tile per step, one remembered size per kind of dialog
+eq('the same steps as Files', [ZOOM_MIN, ZOOM_MAX], [FILES_MIN, FILES_MAX]);
+eq('step 0 is the old tile', thumbMetrics(0), { thumb: 72, tileW: 104, tileH: 118 });
+eq('smallest', thumbMetrics(ZOOM_MIN), { thumb: 48, tileW: 88, tileH: 94 });
+eq('largest', thumbMetrics(ZOOM_MAX), { thumb: 200, tileW: 232, tileH: 246 });
+eq('beyond the steps', thumbMetrics(99), thumbMetrics(ZOOM_MAX));
+eq('not a step', thumbMetrics(1.5), thumbMetrics(0));
+let grows = true;
+for (let z = ZOOM_MIN; z < ZOOM_MAX; z++) if (!(thumbMetrics(z + 1).thumb > thumbMetrics(z).thumb)) grows = false;
+eq('each step is larger', grows, true);
+eq('clamp high', clampZoom(9), ZOOM_MAX);
+eq('clamp low', clampZoom(-9), ZOOM_MIN);
+eq('clamp junk', clampZoom('3'), 0);
+eq('no size saved', zoomFor(null, true), 0);
+eq('saved for pictures', zoomFor({ zoom: { images: 3 } }, true), 3);
+eq('pictures and files apart', zoomFor({ zoom: { images: 3 } }, false), 0);
+eq('saved junk', zoomFor({ zoom: { files: 'big' } }, false), 0);
+eq('saved out of range', zoomFor({ zoom: { files: 40 } }, false), ZOOM_MAX);
+eq('save size keeps the view', saveZoom({ images: 'thumbs' }, true, 2), { images: 'thumbs', zoom: { images: 2 } });
+eq('save size beside the other', saveZoom({ zoom: { files: -1 } }, true, 4), { zoom: { files: -1, images: 4 } });
+eq('save size, nothing yet', saveZoom(null, false, 7), { zoom: { files: ZOOM_MAX } });
+eq('the view saved after keeps the size', saveView(saveZoom(null, true, 1), true, 'list'), { zoom: { images: 1 }, images: 'list' });
+
+console.log(process.exitCode ? 'FAILED' : `ok ${ok}`);

@@ -1,0 +1,12 @@
+{
+  "id": "installer",
+  "version": "0.8.6",
+  "name": "Install phos",
+  "description": "Installs phos to the disk from the live system",
+  "size": [760, 560],
+  "minSize": [640, 480],
+  "dock": false,
+  "live": true,
+  "category": "System",
+  "permissions": ["install:disk"]
+}

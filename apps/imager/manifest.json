@@ -1,0 +1,11 @@
+{
+  "id": "imager",
+  "version": "0.8.6",
+  "name": "phos Imager",
+  "description": "Writes phos to an SD card or a USB stick and prepares the Raspberry Pi's first boot",
+  "size": [960, 660],
+  "minSize": [820, 560],
+  "dock": false,
+  "category": "System",
+  "permissions": ["disks:manage"]
+}

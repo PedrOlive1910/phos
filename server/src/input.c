@@ -1,0 +1,167 @@
+/* input.c — evdev device detection and event reading. */
+#include "input.h"
+#include "osk.h"
+#include "tp/tp.h"
+
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+
+#define LONG_BITS (8 * sizeof(long))
+#define NLONGS(n) (((n) + LONG_BITS - 1) / LONG_BITS)
+#include "inputkind.h"
+#define HAS(bits, n) (((bits)[(n) / LONG_BITS] >> ((n) % LONG_BITS)) & 1UL)
+
+/* Adds the device if it is a keyboard, mouse or tablet (and grabs it); otherwise closes it. */
+static void add_device(Input *in, int fd, const char *path) {
+    unsigned long ev[NLONGS(EV_MAX + 1)] = {0};
+    unsigned long keys[NLONGS(KEY_MAX + 1)] = {0};
+    unsigned long abs[NLONGS(ABS_MAX + 1)] = {0};
+    ioctl(fd, EVIOCGBIT(0, sizeof ev), ev);
+    ioctl(fd, EVIOCGBIT(EV_KEY, sizeof keys), keys);
+    ioctl(fd, EVIOCGBIT(EV_ABS, sizeof abs), abs);
+    unsigned long props[NLONGS(INPUT_PROP_MAX + 1)] = {0};
+    ioctl(fd, EVIOCGPROP(sizeof props), props);
+
+    int keyboard = HAS(ev, EV_KEY) && HAS(keys, KEY_A) && HAS(keys, KEY_ENTER);
+    int mouse    = HAS(ev, EV_REL) && HAS(keys, BTN_LEFT);
+    int tablet   = input_is_abs_pointer(ev, abs, keys, props);
+    if ((!keyboard && !mouse && !tablet) || in->count >= INPUT_MAX_DEVICES) { close(fd); return; }
+
+    InputDevice *d = &in->dev[in->count++];
+    memset(d, 0, sizeof *d);                /* the slot may have belonged to one that was unplugged */
+    d->fd = fd;
+    ioctl(fd, EVIOCGNAME(sizeof d->name), d->name);
+    struct input_id id = {0};
+    ioctl(fd, EVIOCGID, &id);
+    d->bus = id.bustype;
+    d->keyboard = keyboard && osk_full_keyboard(keys, NLONGS(KEY_MAX + 1), d->name);
+    unsigned long rel[NLONGS(REL_MAX + 1)] = {0};
+    ioctl(fd, EVIOCGBIT(EV_REL, sizeof rel), rel);
+    d->wheel_hires = HAS(rel, REL_WHEEL_HI_RES);
+    d->hwheel_hires = HAS(rel, REL_HWHEEL_HI_RES);
+    unsigned long led[NLONGS(LED_MAX + 1)] = {0};
+    if (HAS(ev, EV_LED)) ioctl(fd, EVIOCGBIT(EV_LED, sizeof led), led);
+    for (int l = LED_NUML; l <= LED_SCROLLL; l++) if (HAS(led, l)) d->leds |= 1 << l;
+    d->led_state = -1;
+    /* touchpad or touchscreen (multitouch): handled by our own driver (tp/tp.c) */
+    d->tp = tp_open(fd, d->name);
+    if (d->tp) tablet = 0;
+    if (tablet) {
+        d->has_abs = 1;
+        ioctl(fd, EVIOCGABS(ABS_X), &d->ax);
+        ioctl(fd, EVIOCGABS(ABS_Y), &d->ay);
+    }
+    /* Exclusive: keys do not reach the text console underneath. */
+    if (ioctl(fd, EVIOCGRAB, 1))
+        fprintf(stderr, "input: could not grab %s: %s\n", d->name, strerror(errno));
+    fprintf(stderr, "input: %s -> %s%s%s\n", path, d->name,
+            keyboard ? " [keyboard]" : "", d->tp ? (tp_kind(d->tp) == TP_KIND_TOUCHSCREEN ? " [touchscreen]" : " [touchpad]")
+            : mouse ? " [mouse]" : (tablet ? " [tablet]" : ""));
+}
+
+int input_open(Input *in) {
+    memset(in, 0, sizeof *in);
+    for (int i = 0; i < 64 && in->count < INPUT_MAX_DEVICES; i++) {
+        char path[32];
+        snprintf(path, sizeof path, "/dev/input/event%d", i);
+        int fd = open(path, O_RDWR | O_NONBLOCK | O_CLOEXEC);      /* writable: the lock lights (input_set_leds) */
+        if (fd < 0) fd = open(path, O_RDONLY | O_NONBLOCK | O_CLOEXEC);
+        if (fd >= 0) add_device(in, fd, path);
+    }
+    return in->count > 0 ? 0 : -1;
+}
+
+int input_open_fds(Input *in, const int *fds, int n) {
+    memset(in, 0, sizeof *in);
+    for (int i = 0; i < n; i++) {
+        fcntl(fds[i], F_SETFL, fcntl(fds[i], F_GETFL) | O_NONBLOCK);
+        add_device(in, fds[i], "(lord-sessiond)");
+    }
+    return in->count > 0 ? 0 : -1;
+}
+
+int input_add_fds(Input *in, const int *fds, int n) {
+    int before = in->count;
+    for (int i = 0; i < n; i++) {
+        fcntl(fds[i], F_SETFL, fcntl(fds[i], F_GETFL) | O_NONBLOCK);
+        add_device(in, fds[i], "(enchufado)");
+    }
+    return in->count - before;
+}
+
+void input_remove(Input *in, int idx) {
+    if (idx < 0 || idx >= in->count) return;
+    InputDevice *d = &in->dev[idx];
+    fprintf(stderr, "input: %s is gone; closing it\n", d->name);
+    close(d->fd);
+    tp_free(d->tp);
+    memmove(&in->dev[idx], &in->dev[idx + 1], sizeof in->dev[0] * (size_t)(in->count - idx - 1));
+    in->count--;
+}
+
+void input_close(Input *in) {
+    for (int i = 0; i < in->count; i++) {
+        ioctl(in->dev[i].fd, EVIOCGRAB, 0);
+        close(in->dev[i].fd);
+        tp_free(in->dev[i].tp);
+        in->dev[i].tp = NULL;
+    }
+    in->count = 0;
+}
+
+void input_dispatch(Input *in, int idx, InputHandler cb, void *ud) {
+    InputDevice *d = &in->dev[idx];
+    struct input_event evs[64];
+    for (;;) {
+        ssize_t n = read(d->fd, evs, sizeof evs);
+        if (n <= 0) break;
+        for (size_t i = 0; i < (size_t)n / sizeof evs[0]; i++) {
+            if (d->keyboard && evs[i].type == EV_KEY && evs[i].value == 1 && evs[i].code >= KEY_Q && evs[i].code <= KEY_M) d->typed = 1;
+            cb(ud, d, &evs[i]);
+        }
+    }
+}
+
+void input_set_leds(Input *in, int mask) {
+    for (int i = 0; i < in->count; i++) {
+        InputDevice *d = &in->dev[i];
+        int want = mask & d->leds;
+        if (!d->leds || want == d->led_state) continue;
+        struct input_event ev[4];
+        int n = 0;
+        memset(ev, 0, sizeof ev);
+        for (int l = LED_NUML; l <= LED_SCROLLL; l++)
+            if (d->leds & 1 << l) { ev[n].type = EV_LED; ev[n].code = (unsigned short)l; ev[n].value = (want >> l) & 1; n++; }
+        ev[n].type = EV_SYN;
+        ev[n].code = SYN_REPORT;
+        n++;
+        /* a device opened read-only or already revoked doesn't take it: not tried again until the lights change */
+        if (write(d->fd, ev, sizeof ev[0] * (size_t)n) < 0 && d->led_state == -1)
+            fprintf(stderr, "input: %s: could not set the lock lights: %s\n", d->name, strerror(errno));
+        d->led_state = want;
+    }
+}
+
+/* Read once: the kind of computer doesn't change while it runs. No DMI (a Raspberry Pi): 0. */
+static int portable_computer(void) {
+    static int known = -1;
+    if (known < 0) {
+        int type = 0;
+        FILE *f = fopen("/sys/class/dmi/id/chassis_type", "r");
+        if (f) { if (fscanf(f, "%d", &type) != 1) type = 0; fclose(f); }
+        known = osk_chassis_portable(type);
+    }
+    return known;
+}
+
+int input_has_keyboard(const Input *in) {
+    for (int i = 0; i < in->count; i++) {
+        const InputDevice *d = &in->dev[i];
+        if (d->keyboard && osk_keyboard_counts(d->bus, portable_computer(), d->typed)) return 1;
+    }
+    return 0;
+}

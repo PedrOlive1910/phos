@@ -1,0 +1,9 @@
+{
+  "isolated": "Roda isolado, no seu próprio processo",
+  "linux": "App do Linux",
+  "lordos": "App do phos",
+  "package": "App instalado (.lpk)",
+  "system": "App do sistema — parte do phos, verificado com ele",
+  "title": "Sobre o {app}",
+  "version": "Versão {v}"
+}

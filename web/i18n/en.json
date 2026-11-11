@@ -1,0 +1,435 @@
+{
+  "lang": "en",
+  "langName": "English",
+  "ogLocale": "en_US",
+  "meta": {
+    "title": "LordOS — the free, fast and secure Linux desktop",
+    "description": "LordOS is a free GNU/Linux distribution based on Debian with its own desktop environment, display server and Wayland compositor, built on solid Debian and Wayland foundations. Private by design. Runs on 64-bit PCs (amd64) and on the Raspberry Pi 5 (arm64).",
+    "galleryTitle": "LordOS gallery — every screen",
+    "galleryDescription": "Real screenshots of LordOS, the free GNU/Linux distribution based on Debian with a desktop environment of its own. No mockups, no retouching."
+  },
+  "skip": "Skip to content",
+  "navLabel": "Main",
+  "langLabel": "Language",
+  "homeLabel": "LordOS home",
+  "navFeatures": "Features",
+  "navGallery": "Gallery",
+  "navDownload": "Download",
+  "navSupport": "Support",
+  "ghLabel": "LordOS on GitHub",
+  "navCommunity": "Community",
+  "navBlog": "Blog",
+  "navAbout": "About",
+  "badge": "Version 0.8.8 · Beta",
+  "heroTitle": "The free, fast and secure Linux desktop.",
+  "heroLead": "LordOS is a free GNU/Linux distribution based on Debian with its own desktop environment, display server and Wayland compositor written in C, its own interface engine, and native apps made to feel calm, clear and private.",
+  "ctaDownload": "Download LordOS",
+  "ctaTour": "Take the tour",
+  "altDesktop": "The LordOS desktop with the Dock, the menu bar and the About window",
+  "featTitle": "Everything you need. Nothing you don’t.",
+  "featLead": "A complete desktop with native apps, privacy built in, and the Linux apps you already use.",
+  "features": [
+    [
+      "A desktop of its own",
+      "Its own display server and Wayland compositor in C and its own interface engine, on a solid Debian base. Smooth on any 64-bit PC (amd64), and light enough for the Raspberry Pi 5 (arm64)."
+    ],
+    [
+      "Private by design",
+      "Installable LordOS apps run isolated and ask before using your camera, microphone, files or network. You decide."
+    ],
+    [
+      "A firewall you can see",
+      "Watch every connection on a live world map, then allow or block it per app, or turn on blocklists of ad, tracker and malware sites."
+    ],
+    [
+      "Passwords built in",
+      "A vault for passwords, 2FA codes and cards that unlocks with a password or a USB key."
+    ],
+    [
+      "Mail, Calendar, Contacts",
+      "Native apps for your accounts, with remote images blocked until you say so."
+    ],
+    [
+      "Your Linux apps too",
+      "Chromium, Firefox and GTK apps fit right in, with the same window frame and dark mode."
+    ]
+  ],
+  "showcase": [
+    [
+      "Monitor",
+      "Everything at a glance",
+      "CPU, memory, network, disks and now cooling: live temperatures, fan curves and a full-speed button for heavy work.",
+      "Monitor showing the Cooling tab with the fan curve"
+    ],
+    [
+      "Passwords",
+      "Your secrets, sealed",
+      "Categories, tags, a strong password generator and 2FA codes. The window is hidden from screenshots and screen sharing.",
+      "The Passwords app with an entry open"
+    ],
+    [
+      "Settings",
+      "Make it yours",
+      "Dark mode, accent colors, the Dock on any side, displays, Bluetooth, energy and remote desktop, all in one place.",
+      "Settings, General page"
+    ]
+  ],
+  "dlTitle": "Get LordOS",
+  "dlLead": "Pay what you want, including nothing. Your support keeps LordOS free for everyone.",
+  "isoTitle": "PC and arm64",
+  "isoText": "Live and installable ISOs: one for 64-bit PCs, and one for arm64 UEFI machines and virtual machines, so far run only on emulated QEMU. Try it without installing.",
+  "isoBtn": "Download ISO",
+  "ovaTitle": "Virtual machine",
+  "ovaText": "A ready-made OVA for VirtualBox and VMware: import it, start it and create your account. No installer to run.",
+  "ovaBtn": "Download OVA",
+  "ovaGuide": "Step-by-step guide",
+  "reqLink": "System requirements for each image",
+  "piTitle": "Raspberry Pi 5",
+  "piText": "A ready-to-flash image for SD card or NVMe, with fan control and our own kernel.",
+  "piBtn": "Download image",
+  "debTitle": "Already on Debian 13?",
+  "debText": "Add LordOS to the system you already have, on a PC or a server (VPS), with one command:",
+  "copy": "Copy",
+  "copied": "Copied",
+  "copyCmdLabel": "Copy the install command",
+  "imgTitle": "LordOS Imager",
+  "imgText": "Write LordOS to an SD card or a USB stick from the computer you already have, and set up the Raspberry Pi 5's first boot: its name, your account, Wi-Fi, remote access, appearance and cooling. Every official image is checked against the release signature before anything is erased.",
+  "imgMac": "Download for Mac",
+  "imgWin": "Download for Windows",
+  "imgLinux": "Download for Linux",
+  "imgNote": "It also comes with LordOS (App Launcher → System). Free and open source, it collects nothing.",
+  "dlNote": "Downloads are published on GitHub Releases with SHA-256 checksums.",
+  "verifyTitle": "Verify your download",
+  "verifyText": "Every release is signed with the LordOS release key. Check the signature before you install. Key fingerprint (SHA-256):",
+  "verifyKey": "Download the public key",
+  "supTitle": "Support LordOS",
+  "supLead": "LordOS is free and open source. If it makes your computer better, help us keep building it.",
+  "amountLabel": "Amount",
+  "custom": "Other",
+  "customAria": "Custom amount in US dollars",
+  "payPaypal": "Donate with PayPal",
+  "payMp": "Mercado Pago",
+  "payBinance": "Binance (soon)",
+  "payNote": "With Mercado Pago you choose the amount on the next page.",
+  "altLumoCelebrate": "Lumo celebrating with confetti",
+  "lumoKicker": "Meet Lumo",
+  "lumoTitle": "The guardian of LordOS",
+  "lumoText": "Lumo is a small celestial fox with white fur and violet highlights. Its crown and cape stand for protection, freedom and control, and it shows up when something needs your attention.",
+  "altLumoWave": "Lumo waving hello",
+  "altLumoShield": "Lumo holding a shield",
+  "aboutTitle": "Made by iPERFEX",
+  "aboutLead": "LordOS is created by the iPERFEX group, by Pablo Miranda and Federico Pereira.",
+  "aboutGithub": "Follow the project on GitHub",
+  "role": "Co-creator",
+  "photoOf": "Photo of",
+  "initialsOf": "Initials of",
+  "license": "MIT License",
+  "brand": "Brand guide",
+  "footer": "© 2026 iPERFEX · Pablo Miranda and Federico Pereira. LordOS is free software under the MIT license.",
+  "fontsNote": "Plus Jakarta Sans font license",
+  "banner": "This site is also available in English.",
+  "bannerGo": "Read in English",
+  "bannerClose": "Dismiss",
+  "gallery": {
+    "home": "Home",
+    "gallery": "Gallery",
+    "download": "Download",
+    "kicker": "Gallery",
+    "title": "Every screen, as it is.",
+    "lead": "Real screenshots of LordOS, taken from the running system: no mockups, no retouching. Look around and decide if it’s for you.",
+    "filterLabel": "Category",
+    "themeLabel": "Appearance",
+    "all": "All",
+    "light": "Light",
+    "dark": "Dark",
+    "note": "All screenshots come from the docs folder of the LordOS repository and are updated with each release.",
+    "close": "Close",
+    "prev": "Previous",
+    "next": "Next",
+    "open": "Open",
+    "empty": "No screenshots match these filters.",
+    "imagesCount": "{n} images",
+    "more": "Show more"
+  },
+  "cats": {
+    "desktop": "Desktop",
+    "apps": "Apps",
+    "privacy": "Privacy & security",
+    "settings": "Settings",
+    "hardware": "Hardware & Raspberry Pi 5"
+  },
+  "navApps": "Apps",
+  "themeLabel": "Theme",
+  "themeAuto": "Auto",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "apps": {
+    "title": "Every app, made for LordOS.",
+    "kicker": "Apps",
+    "lead": "The native apps that come with LordOS, built on its own interface engine. Calm, clear and private, with the same look in light and dark mode.",
+    "filterLabel": "Category",
+    "all": "All",
+    "isolated": "Runs isolated",
+    "isolatedTitle": "Runs in its own sandboxed process",
+    "shotOpen": "Open screenshot",
+    "metaTitle": "LordOS apps — every native app",
+    "metaDescription": "The native apps of LordOS, the free GNU/Linux distribution based on Debian with a desktop environment of its own: mail, calendar, files, passwords, media and more.",
+    "teaserKicker": "Native apps",
+    "teaserTitle": "Apps for everything you do",
+    "teaserText": "Mail, calendar, files, passwords, photos, music and more: native apps that look and feel the same.",
+    "seeAll": "See all apps",
+    "cats": {
+      "productivity": "Productivity",
+      "media": "Media",
+      "system": "System",
+      "privacy": "Privacy & security",
+      "thirdparty": "Third-party apps"
+    },
+    "upcoming": "Coming in {v} (in development)",
+    "thirdpartyNote": "Open source apps and suites from other projects that we think are worth having. LordOS does not make them: the Store installs each one from its maker, from the maker's signed repository with the key LordOS pins or from the maker's own package kept with a pinned checksum, and they get the same firewall and permissions as any other Linux app.",
+    "by": "By {v}",
+    "website": "Website",
+    "fromStore": "In the Store"
+  },
+  "debHintA": "On a server without a screen, add",
+  "debHintB": "and use it from your browser.",
+  "changelog": {
+    "title": "Changelog",
+    "lead": "The full notes of every release, newest first, exactly as kept in CHANGELOG.md. Open a release to read it.",
+    "note": "",
+    "unreleased": "Unreleased",
+    "inDev": "In development",
+    "yanked": "Withdrawn",
+    "latest": "Latest release",
+    "compare": "Changes on GitHub",
+    "released": "Released"
+  },
+  "navExplore": "Explore",
+  "navRaspberry": "Raspberry Pi",
+  "explore": {
+    "kicker": "Apps and screenshots",
+    "title": "Explore LordOS",
+    "lead": "Every app that comes with LordOS and the gallery of the whole desktop, in one place.",
+    "jumpLabel": "Go to",
+    "apps": "Apps",
+    "shots": "Screenshots",
+    "metaTitle": "Explore LordOS: apps and screenshots",
+    "metaDescription": "Every LordOS app with its screenshots, and a gallery of the desktop in light and dark."
+  },
+  "pi": {
+    "metaTitle": "LordOS on the Raspberry Pi 5 and Raspberry Pi 500",
+    "metaDescription": "A full desktop on the Raspberry Pi 5 and Pi 500: GPU-composed, hardware video decoding, fan control and the Argon ONE V5 case, with numbers from real boards.",
+    "kicker": "Raspberry Pi 5 · Raspberry Pi 500",
+    "title": "A full desktop on your Raspberry Pi",
+    "lead": "LordOS draws its desktop on the Pi's GPU, decodes HEVC video in hardware, drives the fan and knows the Argon ONE V5 case by name. One image for both boards, written with LordOS Imager.",
+    "download": "Download the Pi image",
+    "guide": "LordOS Imager guide",
+    "capArgon": "Raspberry Pi 5 in the Argon ONE V5 case",
+    "cap500": "Raspberry Pi 500: a Pi 5 inside a keyboard",
+    "artArgon": "Drawing of a Raspberry Pi 5 inside the Argon ONE V5 aluminium case",
+    "art500": "Drawing of the Raspberry Pi 500 keyboard computer",
+    "artPi5": "Drawing of the Raspberry Pi 5 board",
+    "testedTitle": "Tested on real boards",
+    "testedLead": "Numbers from the reports LordOS makes itself ({cmd} and About LordOS), not from a spec sheet.",
+    "pi5Title": "Raspberry Pi 5 · 16 GB",
+    "pi500Title": "Raspberry Pi 500 · 8 GB",
+    "pi5Rows": [
+      [
+        "Boot to desktop",
+        "8.6 s"
+      ],
+      [
+        "Memory in use",
+        "0.6 GB of 16 GB, desktop open"
+      ],
+      [
+        "Display server",
+        "56 MB of RAM, a frame in 5.8 ms"
+      ],
+      [
+        "Dragging a window",
+        "58.8 FPS at 1920 × 1080, on the GPU"
+      ],
+      [
+        "Video",
+        "HEVC decoded in hardware"
+      ],
+      [
+        "Case",
+        "Argon ONE V5, detected"
+      ],
+      [
+        "Also working",
+        "Bluetooth keyboard and mouse, USB audio, Wi-Fi, Ethernet"
+      ]
+    ],
+    "pi500Rows": [
+      [
+        "Display",
+        "4K, 3840 × 2160 at 150 %, composed on the GPU"
+      ],
+      [
+        "Memory in use",
+        "1.8 GB of 7.9 GB, browser and Mail open"
+      ],
+      [
+        "Keyboard",
+        "The built-in keyboard, recognized as is"
+      ],
+      [
+        "Camera",
+        "USB webcam with its microphone"
+      ],
+      [
+        "Signed code",
+        "Verified, 10 components"
+      ],
+      [
+        "Still improving",
+        "Dragging windows at 4K (9 to 37 FPS)"
+      ]
+    ],
+    "thanks": "Tested by {name}. Thank you, Steve!",
+    "argonTitle": "The Argon ONE V5 case, supported",
+    "argonText": "LordOS finds the case on the first boot and asks you once. After that, Settings → Cooling drives its blower with LordOS's own fan service, and its front USB ports and audio jack work. No vendor scripts.",
+    "argonPoints": [
+      [
+        "Quiet by design:",
+        "the aluminium body is a big heatsink. With Balanced, the fan stayed off at 50–53 °C under a full four-core load."
+      ],
+      [
+        "When it's needed:",
+        "2,700 RPM at 30 %, 4,500 at 55 %, up to 7,400 at full speed."
+      ],
+      [
+        "Front ports:",
+        "two USB 2.0 ports, microphone and headphones, on after you pick the case in Settings and restart."
+      ],
+      [
+        "Safe:",
+        "LordOS never changes the bootloader's power settings."
+      ]
+    ],
+    "argonMore": "How LordOS drives the fan",
+    "shotsTitle": "See it on a Pi",
+    "shots": {
+      "desktop": "The desktop, 1920 × 1080",
+      "about": "About LordOS: board, case and signed code",
+      "monitor-overview": "Monitor: the whole system at a glance",
+      "monitor-cpu": "Monitor: each core of the Cortex-A76",
+      "monitor-memory": "Monitor: memory in use",
+      "monitor-network": "Monitor: network activity and every connection",
+      "monitor-disks": "Monitor: the SD card's activity",
+      "monitor-processes": "Monitor: processes",
+      "monitor-cooling": "Monitor: temperature and the Argon's fan",
+      "monitor-voltage": "Monitor: the board's voltages and power draw",
+      "cleaner": "Cleaner: what fills the SD card",
+      "cleaner-review": "Cleaner: review before anything is removed"
+    },
+    "toolsTitle": "Four tools in the terminal",
+    "toolsLead": "They come with LordOS, work over SSH too, and never send anything on their own.",
+    "tools": [
+      [
+        "lordos-fetch",
+        "The crown and a one-screen summary: version, board, kernel, display, CPU, GPU, memory, disk and isolation. --share hides your user and computer names for a screenshot."
+      ],
+      [
+        "lordos-issue",
+        "A complete report for a bug or a hardware test: devices, drivers, displays, signed code, failed services and this boot's errors. Names and addresses are replaced; it only reads, and saves a file you check before posting."
+      ],
+      [
+        "lordos-sysreport",
+        "System Information from a terminal: report for the hardware, and bench --quick or --full for LordBench, the same measurements as the app, also as JSON."
+      ],
+      [
+        "lordos-testbench",
+        "A test card in a window: frames a second and frame times, every key lit as you press it, the mouse and its wheel, and what the display server reports. Handy to check a new keyboard, mouse or screen."
+      ]
+    ],
+    "shareTitle": "Tried LordOS on your Pi? Tell us",
+    "shareText": "Every report helps the next person: which board, which case, which screen, what worked. LordOS writes the report for you, with names and addresses removed, and changes nothing.",
+    "shareAlt": "Or open System Information → Compatibility and share it from there.",
+    "shareReddit": "Post it on r/LordOS",
+    "shareGithub": "Send a hardware report on GitHub",
+    "shareBrowse": "Browse reports from the community",
+    "benchTitle": "Measure your Pi with LordBench",
+    "benchLead": "LordOS comes with its own benchmark. It waits for a quiet system, measures the CPU, memory, GPU, the compositor and video, and compares your board with our reference Raspberry Pi 5.",
+    "benchSteps": [
+      [
+        "In the app",
+        "Open System Information → Performance and press Quick test (under a minute). The Full test adds the disk, every video codec and a few minutes of load on all cores: 4 to 6 minutes, with some wear on an SD card."
+      ],
+      [
+        "In the terminal",
+        "Run the same tests over SSH, also as JSON:"
+      ],
+      [
+        "Share it",
+        "Post a screenshot of the Performance tab on r/LordOS, or paste the JSON in a hardware report, with your board, case and power supply. That is how we see where LordOS is fast and where it isn't yet."
+      ]
+    ],
+    "lumoAlt": "Lumo, the LordOS mascot, waving"
+  },
+  "search": {
+    "label": "Search",
+    "placeholder": "Search pages, questions, apps…",
+    "suggested": "Suggested topics",
+    "results": "Results",
+    "none": "Nothing found for",
+    "hint": "↑ ↓ to move · Enter to open · Esc to close · Ctrl K to search from any page",
+    "kinds": {
+      "page": "Page",
+      "feature": "Feature",
+      "guide": "Guide",
+      "faq": "Question",
+      "app": "App",
+      "legal": "Legal"
+    },
+    "topics": [
+      [
+        "Raspberry Pi 5 and Pi 500",
+        "/raspberry-pi/"
+      ],
+      [
+        "Download LordOS",
+        "/#download"
+      ],
+      [
+        "LordOS Imager guide",
+        "/imager/"
+      ],
+      [
+        "System requirements",
+        "/requirements/"
+      ],
+      [
+        "Virtual machine (OVA)",
+        "/virtual-machine/"
+      ],
+      [
+        "Install on Debian 13",
+        "/faq/#debian-one-liner"
+      ],
+      [
+        "Argon ONE V5 case",
+        "/raspberry-pi/#pi-argon"
+      ],
+      [
+        "LordBench",
+        "/raspberry-pi/#pi-bench"
+      ],
+      [
+        "Apps",
+        "/explore/#apps"
+      ],
+      [
+        "Security",
+        "/legal/security/"
+      ],
+      [
+        "Community on Reddit",
+        "https://www.reddit.com/r/LordOS/"
+      ]
+    ]
+  }
+}

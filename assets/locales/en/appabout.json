@@ -1,0 +1,9 @@
+{
+  "isolated": "Runs isolated, in its own process",
+  "linux": "Linux app",
+  "lordos": "phos app",
+  "package": "Installed app (.lpk)",
+  "system": "System app — part of phos, verified with it",
+  "title": "About {app}",
+  "version": "Version {v}"
+}

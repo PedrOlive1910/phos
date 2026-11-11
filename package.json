@@ -1,0 +1,25 @@
+{
+  "name": "phos",
+  "private": true,
+  "version": "0.8.8.7",
+  "description": "phos — React themes and apps for lord-server",
+  "lordos": {
+    "channel": "beta",
+    "media": "0.8.8",
+    "imager": "0.8.6"
+  },
+  "scripts": {
+    "build": "node tools/build-theme.mjs",
+    "build:theme": "node tools/build-theme.mjs",
+    "build:brand": "node tools/gen-phos-brand.mjs",
+    "build:mascot": "node tools/gen-phos-panda.mjs"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-reconciler": "0.34.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.2",
+    "sharp": "0.34.5"
+  }
+}

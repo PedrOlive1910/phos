@@ -15,7 +15,7 @@ assets/app-host.bundle.js
 .idea/
 assets/sysapps/
 assets/locales/*.tgz
-logs/
+/logs/
 iso-output/
 /code-manifest.json
 /code-manifest.sig

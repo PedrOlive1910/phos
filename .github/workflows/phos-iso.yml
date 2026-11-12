@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 180
     steps:
       - name: Baixar o codigo
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
 
@@ -32,7 +32,7 @@ jobs:
             bash tools/ci/build-phos-iso.sh 2>&1 | tee iso-output/build.log
 
       - name: Guardar ISO e checksum
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: phos-iso-amd64-${{ github.run_number }}
           path: |
@@ -44,7 +44,7 @@ jobs:
 
       - name: Guardar log mesmo em caso de erro
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: phos-build-log-${{ github.run_number }}
           path: iso-output/build.log

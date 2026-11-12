@@ -1,0 +1,4 @@
+# Keep Linux sources and scripts usable regardless of the contributor's OS.
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf

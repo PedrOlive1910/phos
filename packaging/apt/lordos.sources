@@ -6,6 +6,5 @@ URIs: https://lordos.org/apt
 Suites: stable
 Components: main
 Signed-By: /usr/share/keyrings/lordos-archive-keyring.gpg
-
 # phos fork: upstream updates would overwrite this customization.
 Enabled: no

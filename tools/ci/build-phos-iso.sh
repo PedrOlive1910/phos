@@ -11,7 +11,7 @@ cd /src
 apt-get update
 apt-get install -y --no-install-recommends \
   build-essential pkg-config git curl ca-certificates gnupg unzip \
-  nodejs npm python3 cmake clang \
+  nodejs npm python3 cmake clang openssh-client \
   debootstrap squashfs-tools xorriso grub-pc-bin grub-efi-amd64-bin \
   grub-common mtools dosfstools file \
   libxkbcommon-dev libwayland-dev wayland-protocols libcrypt-dev \
@@ -30,7 +30,14 @@ npm run build
 node tools/code-manifest.mjs --check
 sh tools/tts/fetch-audiocpp.sh
 make -C server -j"$(nproc)"
-make -C server test
+# Session-dependent tests need a private runtime directory in this headless container.
+(
+  export XDG_RUNTIME_DIR
+  XDG_RUNTIME_DIR=$(mktemp -d /tmp/phos-tests.XXXXXX)
+  trap 'rm -rf -- "$XDG_RUNTIME_DIR"' EXIT
+  chmod 700 "$XDG_RUNTIME_DIR"
+  make -C server test
+)
 
 mkdir -p /var/tmp/phos-iso/out /src/iso-output
 sh tools/iso/mkdeb-rclone.sh /var/tmp/phos-iso/out amd64

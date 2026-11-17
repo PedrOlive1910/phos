@@ -32,6 +32,9 @@ sh tools/tts/fetch-audiocpp.sh
 make -C server -j"$(nproc)"
 # Session-dependent tests need a private runtime directory in this headless container.
 (
+  # Let locale-specific tests override LANG without LC_ALL taking precedence.
+  unset LC_ALL LC_MESSAGES
+  export LANG=C.UTF-8
   export XDG_RUNTIME_DIR
   XDG_RUNTIME_DIR=$(mktemp -d /tmp/phos-tests.XXXXXX)
   trap 'rm -rf -- "$XDG_RUNTIME_DIR"' EXIT
